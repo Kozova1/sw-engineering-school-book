@@ -1,0 +1,14 @@
+main.pdf
+_minted-main
+*.lol
+*.lof
+*.out
+*.log
+*.toc
+*.aux
+*.fls
+*.txt
+*.latex
+*.fdb_latexmk
+.env
+plantuml.jar

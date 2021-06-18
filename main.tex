@@ -1,0 +1,96 @@
+\documentclass[titlepage,a4paper,openany]{report}
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+\usepackage{import}
+\usepackage{fancyhdr}
+\usepackage{pdfpages}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+\graphicspath{
+  {./images/}
+  {./images/graphs/}
+}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks,
+  linktoc=all,
+  linkcolor=blue,
+  urlcolor=blue
+}
+
+% PlantUML support
+\usepackage{plantuml}
+
+% \usepackage{amsmath}
+% \usepackage{siunitx}
+% \sisetup{per-mode = fraction}
+\usepackage{fontspec}
+\usepackage[nil,bidi=basic]{babel}
+\babelprovide[import=en-US]{american}
+\babelprovide[import=he,main]{hebrew}
+\babelfont{rm}{Linux Libertine O}
+\babelfont[hebrew]{rm}{Linux Libertine O}
+\selectlanguage{hebrew}
+
+% Include code setup
+\usepackage{listings}
+\usepackage{minted} % requires -shell-escape flag
+\usemintedstyle{github}
+\newmintedfile[javacode]{java}{linenos, frame=leftline, framesep=10pt}
+\newmintedfile[luacodeinc]{lua}{linenos, frame=leftline, framesep=10pt}
+
+% Custom commands
+\newcommand{\witheng}[1]{\selectlanguage{english}#1\selectlanguage{hebrew}}
+\newcommand{\withheb}[1]{\selectlanguage{hebrew}#1\selectlanguage{english}}
+\newcommand{\projectname}[0]{\witheng{Learn Programming With Lua}}
+\newcommand{\javainc}[1]{\witheng{\javacode{code/#1}}}
+\newcommand{\luainc}[1]{\witheng{\luacodeinc{code/#1}}}
+
+\pagenumbering{arabic}
+% \renewcommand{\theFancyVerbLine}{\sffamily {\normalsize \oldstylenums{\arabic{FancyVerbLine}}}}
+
+% Header setup
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{דוד ווגמן}
+\fancyhead[C]{\projectname}
+\fancyfoot[C]{\thepage}
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyhead[LE,RO]{דוד ווגמן}
+  \fancyhead[C]{\projectname}
+  \fancyfoot[C]{\thepage}
+}
+\begin{document}
+\import{src}{title}
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+% \newpage
+% \renewcommand\listoflistingscaption{רשימת הקוד}
+% \listoflistings
+\newpage
+
+\import{src}{intro}
+
+\import{src}{structure}
+
+\import{src}{database}
+
+\import{src}{resources}
+
+\import{src}{userguide}
+
+\import{src}{devguide}
+
+\import{src}{reflections}
+
+\import{src}{bib}
+
+\import{src}{appendix}
+
+\end{document}

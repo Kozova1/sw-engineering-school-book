@@ -1,0 +1,25 @@
+\newcommand{\classdiagram}[1]{
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.3\columnwidth]{#1}
+  % Size hand tuned, no touchy!
+\end{figure}
+}
+\section{דיאגרמת מחלקות}
+
+לא מצורף תרשים מחלקות מלא בגלל מגבלות מקום.
+מוצגים תרשימים חלקיים המקושרים ביניהם.
+
+\subsection{מחלקות מידע}
+\classdiagram{dataclassesUMLDiagram}
+
+\subsection{בסיס נתונים}
+\classdiagram{dbUMLDiagram}
+
+\subsection{גרף מעברים בין פעולות}
+\classdiagram{activitiesUMLDiagram}
+
+\subsection{דיאגרמת מחלקות של הפעולות}
+\classdiagram{activitiesClassesUMLDiagram}
+
+\let\classdiagram\undefined

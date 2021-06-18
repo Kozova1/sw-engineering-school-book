@@ -1,0 +1,98 @@
+@startuml
+!theme plain
+skinparam classFontSize 20
+
+entity Gson
+entity Firebase
+
+interface ArticleDao {
+    LiveData<List<Article>> loadArticles()
+    void markAsRead(int id, boolean val)
+    void addArticle(Article article)
+    void remove(int id)
+    void clear()
+    void insertAll(List<Article> articles)
+}
+interface ExerciseDao {
+    LiveData<List<Exercise>> loadExercises()
+    void markAsDone(int id, boolean val)
+    void addExercise(Exercise exercise)
+    void remove(int id)
+    void clear()
+    void insertAll(List<Exercise> exercises)
+}
+abstract class RoomDatabase
+
+abstract class AppDatabase {
+    -String {static} DB_NAME
+    -int {static} NUMBER_OF_THREADS
+    -AppDatabase {static} volatile INSTANCE
+    ExecutorService {static} databaseWriteExecutor
+    +ArticleDao {abstract} articleDao()
+    +ExerciseDao {abstract} exerciseDao()
+}
+
+RoomDatabase <|---- AppDatabase
+AppDatabase "1" *----- "0..*" Article
+AppDatabase "1" *----- "0..*" Exercise
+AppDatabase - ExerciseDao : Accessed by
+ArticleDao - AppDatabase : Accessed by
+
+class Course {
+    +List<Article> articles
+    +List<Exercises> exercises
+}
+
+class Article {
+    +int uid
+    +String title
+    +String contents
+    +boolean hasBeenRead
+    +boolean isHard
+}
+class Exercise {
+    +int uid
+    +String title
+    +String test
+    +String instructions
+    +String template
+    +boolean isDone
+    +boolean isHard
+}
+
+Article o---- Course
+Exercise o---- Course
+
+Article  ---- ArticleRepository : Accessed by
+Exercise ---- ExerciseRepository : Accessed by
+
+class ArticleRepository {
+    -LiveData<List<Articles>> articles
+    -ArticleDao dao
+    LiveData<List<Article>> loadArticles()
+    void markAsRead(int id, boolean val)
+    void addArticle(Article article)
+    +void remove(int id)
+    +void clear()
+}
+
+class ExerciseRepository {
+    -LiveData<List<Exercise>> exercises
+    -ExerciseDao dao
+    LiveData<List<Exercise>> loadExercises()
+    void markAsRead(int id, boolean val)
+    void addExercise(Exercise article)
+    +void remove(int id)
+    +void clear()
+}
+
+ExerciseRepository -----> Course : Constructed from
+ArticleRepository  -----> Course : Constructed from
+AppDatabase <----- ExerciseRepository : Uses data from
+AppDatabase <----- ArticleRepository  : Uses data from
+
+Course - Gson : JSON encode/decode
+
+Firebase - Course : store/fetch as JSON
+
+@enduml

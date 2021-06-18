@@ -1,0 +1,81 @@
+\chapter{בסיסי נתונים}
+
+\section{בסיס נתונים מקומי - Room Persistent Database}
+
+\subsection{ישויות}
+
+בסיס הנתונים המקומי מכיל שתי ישויות, כאשר כל אחת נשמרת בטבלה נפרדת עם השם שלה.
+הישויות הן:
+
+\paragraph{Article}
+
+הישות מייצגת שיעור אחד, ולמעשה זהה למחלקת Article.
+
+\paragraph{Exercise}
+
+הישות מייצגת מטלה אחת, ולמעשה זהה למחלקת Exercise.
+
+\subsection{טבלאות}
+
+כל הערכים בבסיס הנתונים הם חובה (NOT NULL), על מנת למנוע שילובים בלתי הגיוניים,
+למשל שיעור ללא תוכן או שיעור ללא כותרת.
+
+\subsubsection*{Article}
+\paragraph{uid}
+
+ערך שלם, מפתח ראשי ובעל העלאה אוטומטית (AUTOINCREMENT) מייצג את מספר השיעור.
+
+\paragraph{Title}
+
+ערך מחרוזת, מכיל את הכותרת ואת שם השיעור.
+
+\paragraph{ArticleContents}
+
+ערך מחרוזת, מכיל את קוד ה-Markdown של תוכן השיעור.
+
+\paragraph{HasBeenRead}
+
+ערך שלם, מכיל ערך 0 או 1 (בוליאני, true או false בהתאם) בהתאם להאם השיעור הושלם (נקרא).
+
+\noindent\rule{\textwidth}{0.4pt}
+
+\subsubsection*{Exercise}
+\paragraph{uid}
+
+ערך שלם, מפתח ראשי ובעל העלאה אוטומטית (AUTOINCREMENT) מייצג את מספר התרגיל.
+
+\paragraph{Title}
+
+ערך , מכיל את הכותרת ואת שם המטלה.
+
+\paragraph{Test}
+
+ערך מחרוזת, מכיל את קוד ה-Lua שמוודא האם הפתרון תקין.
+
+\paragraph{Instructions}
+
+ערך מחרוזת, מכיל את קוד ה-Markdown אשר מוצג למשתמש כהוראות שימוש.
+
+\paragraph{Template}
+
+ערך מחרוזת, מכיל את קוד ה-Lua שמוצג למשתמש לפני שכתב קוד.
+
+\paragraph{IsDone}
+
+ערך שלם, מכיל ערך 1 או 0 (בוליאני, true או false בהתאם) בהתאם להאם התרגיל נפתר בהצלחה.
+
+\paragraph{IsHard}
+
+ערך שלם, מכיל ערך 1 או 0 (בוליאני, true או false בהתאם) בהתאם להאם התרגיל מסומן כקשה במיוחד.
+
+\noindent\rule{\textwidth}{0.4pt}
+
+\section{בסיס נתונים חיצוני - Firebase Realtime Database}
+\subsection*{learnprogramming-lua-app-default-rtdb}
+
+מאפשר לכל אחד להוסיף ולקרוא, אך לא למחוק או לשנות.
+לא דורש כניסה על מנת להוסיף או לקרוא ערכים.
+מכיל צמדי ערכים:
+
+\paragraph{key} מספר בעל 8 ספרות, משמש כמספר הקורס.
+\paragraph{value} גרסה מומרת ל-JSON של המחלקה Course.

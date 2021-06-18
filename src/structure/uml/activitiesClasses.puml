@@ -1,0 +1,57 @@
+@startuml
+!theme plain
+skinparam classFontSize 10
+
+abstract class AppCompatActivity
+entity "Gson" as gson
+entity "Markwon" as md
+entity "Prism4j" as prism
+entity "SharedPreferences" as prefs
+entity "ArticleRepository" as articles
+entity "ExerciseRepository" as exercises
+entity "Firebase RTDB" as firebase
+
+class "MainActivity" as main {
+    -DrawerLayout drawer
+    -BroadcastReceiver airplaneNagger
+    -void finishCourse()
+    -void setMenuItemWhite(MenuItem item)
+}
+class "FirstTimeActivity" as fta {
+    -void moveToNextActivity()
+    #boolean {static} isInCourse(Context ctx)
+    #void {static} beginCourse(Context ctx)
+    #void {static} endCourse(Context ctx)
+}
+class "SplashScreenActivity" as splash {
+    -String {static} SPLASH_PREF_STRING
+    #void {static} wasSplashShownBefore(Activity act)
+    #void {static} setSplashShown(Activity act)
+    -void moveToNextActivity()
+}
+class "ViewerActivity" as view {
+	+boolean onOptionsItemSelected(MenuItem item)
+}
+
+AppCompatActivity <|-- main 
+AppCompatActivity <|-- fta
+AppCompatActivity <|-- splash 
+AppCompatActivity <|-- view
+
+splash <--> prefs : Store whether opened before
+fta    <--> prefs : Store whethere in course
+
+splash -> fta    : Transits to
+fta <- gson      : Decode JSON
+fta <--> firebase : Request and receive JSON of course
+main --> firebase : Upload JSON to firebase
+gson <- main     : Encode JSON
+main <---> articles  : Read, Create and Delete
+main <---> exercises : Read, Create and Delete
+main <--- md : Render Markdown code
+main <--- prism : Highlight Markdown code
+main <---> view : Transits to
+view <---- md : Render Markdown code
+view <---- prism : Highlight Markdown code
+
+@enduml

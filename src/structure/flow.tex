@@ -1,0 +1,110 @@
+\newenvironment{FigurePlantUML}{
+\begin{otherlanguage}{english}
+\begin{center}
+}{
+\end{center}
+\end{otherlanguage}
+}
+
+\section{זרימת מידע באפליקציה}
+
+\subsection{כניסה ראשונה לאפליקציה}
+
+\begin{FigurePlantUML}
+\begin{plantuml}
+@startuml
+!theme plain
+
+actor User
+participant SplashScreenActivity as splash
+participant FirstTimeActivity as splash
+database SharedPreferences as prefs
+
+splash -> User : Prompt with Splash Screen
+User -> splash : Click "Next" button
+splash -> prefs : Write splash shown to preferences
+splash -> FirstTimeActivity : Transit
+FirstTimeActivity -> User : Prompt user for action
+
+@enduml
+\end{plantuml}
+\end{FigurePlantUML}
+
+\selectlanguage{hebrew}
+
+\subsection{כניסה לאפליקציה}
+\begin{FigurePlantUML}
+\begin{plantuml}
+@startuml
+!theme plain
+
+actor User
+participant SplashScreenActivity as splash
+participant FirstTimeActivity as splash
+database SharedPreferences as prefs
+
+User -> splash              : Launch app
+splash -> prefs             : Request whether launched before
+prefs -> splash
+splash -> FirstTimeActivity : Transit
+FirstTimeActivity -> User : Prompt user for action
+
+@enduml
+\end{plantuml}
+\end{FigurePlantUML}
+
+\subsection{כניסה לקורס}
+\begin{FigurePlantUML}
+\begin{plantuml}
+@startuml
+!theme plain
+
+actor User
+participant FirstTimeActivity
+participant Gson
+participant MainActivity
+database Firebase
+database Room
+
+FirstTimeActivity -> User         : Prompt for Course ID
+User -> FirstTimeActivity         : Enter Course ID
+FirstTimeActivity -> Firebase     : Request Course Data for ID
+Firebase -> FirstTimeActivity     : Receive Course encoded as JSON
+FirstTimeActivity -> Gson         : Decode JSON as Course
+Gson -> FirstTimeActivity         : Return Decoded Course
+FirstTimeActivity -> Room         : Clear Database
+FirstTimeActivity -> Room         : Insert Course values
+FirstTimeActivity -> MainActivity : Transit
+MainActivity -> User              : Prompt user for action
+
+@enduml
+\end{plantuml}
+\end{FigurePlantUML}
+
+\subsection{פרסום קורס}
+\begin{FigurePlantUML}
+\begin{plantuml}
+@startuml
+!theme plain
+
+actor User
+participant MainActivity as main
+participant FirstTimeActivity as fta
+participant Gson as gson
+database Firebase as fire
+database Room as room
+
+User -> main : Click "publish course"
+main -> room : Request all database contents
+room -> main : Return all database contents
+main -> gson : Encode course as JSON
+gson -> main
+main -> main : Generate random ID
+main -> fire : Upload course as JSON with random ID
+main -> User : Display ID and copy to clipboard
+main -> fta  : Transit
+
+@enduml
+\end{plantuml}
+\end{FigurePlantUML}
+\selectlanguage{hebrew}

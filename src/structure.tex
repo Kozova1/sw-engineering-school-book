@@ -1,0 +1,220 @@
+\chapter{מבנה האפליקציה}
+
+הפתרון שבניתי הוא אפליקציה אשר מתפקדת בדומה ל-\witheng{Google Classroom},
+אך כוללת כלים המיועדים ספציפית ללימוד שפת תוכנה.
+האפליקציה מאפשרת שימוש בשפת Lua על מנת להגדיר תרגילים ובדיקה אוטומטית שלהם.
+
+\section{מחלקות}
+
+\paragraph{Article}
+
+מחלקה המחזיקה את כל המידע של שיעור אחד.
+מתפקדת גם כאחת מהישויות בבסיס הנתונים.
+
+\paragraph{Exercise}
+
+מחלקה המחזיקה את כל המידע של מטלה / תרגיל אחד.
+מתפקדת גם כאחת מהישויות בבסיס הנתונים.
+
+\paragraph{Course}
+
+מחלקה המחזיקה קורס שלם - נמצאת בשימוש רק על מנת להקל על המרה ל-JSON ושליחה לבסיס הנתונים.
+
+\paragraph{ListFragment}
+
+מחלקה המציגה למשתמש את רשימת חומרי הלימוד (שיעורים) או המטלות בקורס הנוכחי,
+המחלקה משתמשת ב-RecyclerView על מנת להציג את הרשימה.
+בהתאם למידע שהועבר ב-Intent.
+על מנת להזין את המידע ל-RecyclerView המחלקה משתמשת במחלקות ExerciseListAdapter ו-ArticleListAdapter.
+
+\paragraph{CreatingArticlesInfoFragment}
+
+מחלקה המציגה למשתמש מידע בסיסי על יצירת חומרי לימוד (שיעורים) בקורס.
+משתמשת בספריית Markwon על מנת להמיר קוד Markdown לטקסט קריא.
+
+\paragraph{CreatingExercisesInfoFragment}
+
+מחלקה המציגה למשתמש מידע על יצירת מטלות בקורס,
+כולל הסברים על כתיבת בדיקות אוטומטיות לתרגילים.
+משתמשת בספריית Markwon על מנת להמיר קוד Markdown לטקסט קריא.
+
+\paragraph{Listing}
+
+מחלקה המייצגת כרטיס אחד, אשר יכול לייצג מטלה או שיעור (חומר לימוד).
+המחלקה מכילה את הפונקצייה bindTo, אשר מקבלת ערך מסוג T extends Listable ומעתיקה את המידע בו לעצמה, כך שתתאים לשיעור או למטלה שאותה היא מייצגת.
+
+
+\paragraph{Listable}
+
+ממשק המייצג או Article או Exercise, נמצא בשימוש רק כדי להגביל את מחלקת Listing לשתי האפשרויות האלו.
+
+\paragraph{ReplFragment}
+
+מחלקה המציגה למשתמש REPL המאפשר לו להריץ קוד בשפת Lua.
+המחלקה משתמשת בספריית LuaJ על מנת להריץ קוד Lua.
+הספרייה משמשת להרצת הפתרונות ולבדיקתם.
+על מנת לדאוג שהפלט יופיע בצורה נכונה, משתמשים ב-PipedInputStream וב-PipedOutputStream בתור stdout (פלט ראשי) של המכונה הווירטואלית שמריצה את קוד ה-Lua.
+המכונה הווירטואלית מכילה מספר ספריות מובנות, כמו ספריית IO, ספריית coroutines ועוד.
+המכונה הווירטואלית מכילה גם את ספריית java, המאפשרת לקוד Lua לתקשר עם קוד Java.
+הספרייה הזאת אינה משולבת באפליקציה מסיבות אבטחה - נתינת גישה לקוד Java עלול לגרום לנזק לאפליקציה.
+
+\paragraph{ArticleFragment}
+
+מחלקה המציגה למשתמש שיעור אחד, אשר מפורמט באמצעות שפת Markdown.
+המחלקה משתמשת בספריית Markwon על מנת להמיר קוד Markdown לטקסט, כך שיהיה ניתן להציג אותו.
+הספרייה דואגת לפרמוט הטקסט, גודל, גופן ועוד.
+המחלקה משתמשת גם בספריית Prism4j, על מנת לדאוג שקוד ה-Markdown יופיע בצבעים הנכונים.
+
+בנוסף לכך, המחלקה משתמשת בספריית LuaJ על מנת להריץ קוד Lua.
+הספרייה משמשת להרצת הפתרונות ולבדיקתם.
+
+\paragraph{ExerciseFragment}
+
+מחלקה המציגה למשתמש מטלה אחת, עם הוראות מפורמטות באמצעות Markdown ותיבת טקסט להזנת קוד.
+המחלקה כוללת FloatingActionButton אשר משמש להרצת הקוד ולבדיקתו.
+המחלקה משתמשת בספריית Markwon על מנת להמיר קוד Markdown לטקסט, כך שיהיה ניתן להציג אותו.
+הספרייה דואגת לפרמוט הטקסט, גודל, גופן ועוד.
+המחלקה משתמשת גם בספריית Prism4j, על מנת לדאוג שקוד ה-Markdown יופיע בצבעים הנכונים.
+
+
+\paragraph{AddContentFragment}
+
+מחלקה המקבלת את בחירת המשתמש אם להוסיף שיעור או מטלה, ומדליק את ה-Fragment הרלוונטי.
+
+\paragraph{AddArticleFragment}
+
+מחלקה המציגה למשתמש את מסך הוספת שיעור (או חומר לימוד) לקורס.
+
+\paragraph{AddExerciseFragment}
+
+מחלקה המציגה למשתמש את מסך הוספת מטלה לקורס.
+
+\paragraph{ArticleListAdapter}
+
+מחלקה המזינה נתונים על שיעורים וחומרי לימוד שונים מבסיס הנתונים המקומי (Room) ל-ListFragment.
+
+\paragraph{ExerciseListAdapter}
+
+מחלקה המזינה נתונים על מטלות שונות מבסיס הנתונים המקומי (Room) ל-ListFragment.
+
+\section{מסכים ופעולות - Activites}
+
+\subsection*{SplashScreenActivity}
+
+מציג מסך חד פעמי המסביר למשתמש על האפליקציה ועל שפת Lua בפעם הראשונה שהאפליקציה נפתחת.
+
+\paragraph{moveToNextActivity}
+
+הפעולה עוברת ל-FirstTimeActivity ונסגרת, בלי להשאיר את עצמה על ה-\witheng{Back Stack}.
+
+\paragraph{wasSplashShownBefore}
+
+הפונקצייה בודקת ב-SharedPreferences האם הפעולה הורצה בעבר.
+
+\begin{itemize}
+  \item פרמטר \witheng{Activity act} - הפעולה שבודקים ב-SharedPreferences שלה.
+\end{itemize}
+
+\paragraph{setSplashShown}
+
+הפונקצייה רושמת ב-SharedPreferences שהפעולה הורצה בעבר, על מנת שלא תודלק שוב.
+
+\begin{itemize}
+  \item פרמטר \witheng{Activity act} - הפעולה שרושמים ב-SharedPreferences שלה.
+\end{itemize}
+
+\subsection*{FirstTimeActivity}
+
+מציג מסך שבו מחליטים אם ליצור קורס או להכנס לקורס קיים, בעזרת קוד בן 8 ספרות הניתן בפרסום הקורס.
+הקוד מייצג ערך השמור בבסיס הנתונים החיצוני (Firebase RTDB), אשר מורד ומומר מ-JSON לערך מסוג Course.
+אם המשתמש כבר נמצא בקורס, הפעולה עוברת ל-MainActivity.
+
+\paragraph{moveToNextActivity}
+
+הפעולה עוברת ל-MainActivity ונסגרת, בלי להשאיר את עצמה על ה-\witheng{BackStack}.
+
+\paragraph{isInCourse}
+
+בודק האם המשתמש נמצא כרגע בקורס לפי ערך ה-SharedPreferences שלו.
+
+\begin{itemize}
+  \item פרמטר \witheng{Context ctx} - ההקשר שממנו מקבלים את ה-SharedPreferences.
+\end{itemize}
+
+\paragraph{beginCourse}
+
+כותב ל-SharedPreferences שהמשתמש התחיל קורס.
+
+\begin{itemize}
+  \item פרמטר \witheng{Context ctx} - ההקשר שממנו מקבלים את ה-SharedPreferences.
+\end{itemize}
+
+\paragraph{endCourse}
+
+כותב ל-SharedPreferences שהמשתמש יצא מהקורס.
+
+\begin{itemize}
+  \item פרמטר \witheng{Context ctx} - ההקשר שממנו מקבלים את ה-SharedPreferences.
+\end{itemize}
+
+\subsection*{ViewerActivity}
+
+מציג למשתמש שיעור (Article) או תרגיל (Exercise), באמצעות ExerciseFragment או ArticleFragment.
+
+\paragraph{onOptionItemSelected}
+
+דורס פעולה של Activity.
+בודק האם המשתמש לחץ על כתפור ``חזור'', ואם כן חוזר ל-MainActivity.
+
+\begin{itemize}
+  \item פרמטר \witheng{@NonNull MenuItem item} - ה-MenuItem שנבחר על ידי המשתמש.
+  \item ערך מוחזר boolean - האם ה-MenuItem שנבחר זוהה.
+\end{itemize}
+
+\subsection*{MainActivity}
+
+הפעולה המרכזית, המכילה \witheng{Navigation Drawer} אשר בוחר איזה Fragment מוצג.
+
+\paragraph{airplaneNagger}
+
+משתנה מסוג BroadcastReceiver הבודק האם הטלפון מחליף למצב טיסה,
+ואם כן שולח Notification שמציע למשתמש להתקדם בחומר הלימוד באפליקציה.
+ניתן לכבות ולהדליק את ה-BroadcastReceiver באמצעות אחת האפשרויות ב-Options Menu של MainActivity.
+
+\paragraph{finishCourse}
+
+כותב ל-SharedPreferences שהקורס נגמר באמצעות FirstTimeActivity.endCourse,
+ואז חוזר ל-FirstTimeActivity באמצעות Intent.
+
+\paragraph{onBackPressed}
+
+דורס את Activity.onBackPressed על מנת לדאוג שה-\witheng{Navigation Drawer} נסגר כאשר חוזרים אחורה.
+
+\paragraph{onCreateOptionsMenu}
+
+דורס את Activity.onCreateOptionsMenu על מנת לדאוג להדליק ולכבות את ה-BroadcastReceiver בהתאם להגדרות השמורות.
+בודק ב-SharedPreferences על מנת להחליט האם ה-Checkbox של ``חסום הודעות במצב טיסה'' צריכה להיות מסומנת.
+
+\paragraph{onOptionsItemSelected}
+
+דורס את Activity.onOptionsItemSelected על מנת לנהל את ה-\witheng{Options Menu} של הפעולה:
+
+\begin{itemize}
+  \item אם נבחר Reset Local Database - להעלות Alert Dialog, ואם נבחר yes - למחוק את כל התוכן של הקורס הנוכחי.
+  \item אם נבחר Publish Course - להעתיק את כל המידע מבסיס הנתונים לתוך Course, להמיר ל-JSON, ליצור קוד בעל 8 ספרות רנדומליות המייצג את הקורס, לעתיק אותו ל-Clipboard ולהעלות ל-Firebase.
+    לאחר הבחירה, הקורס נסגר באמצעות finishCourse.
+  \item אם נבחר Exit Course - לסגור את הקורס באמצעות finishCourse.
+  \item אם Disable Airplane Notification מסומן, להדליק את AirplaneModeDuolingoNotificationSender. אם לא מסומן, לכבות את ה-BroadcastReceiver.
+\end{itemize}
+
+\paragraph{setMenuItemWhite}
+
+מוודא צבע הטקסט בפרמטר הוא לבן, על מנת שישאר קריא.
+
+\begin{itemize}
+  \item פרמטר MenuItem item - ה-MenuItem שיהפוך ללבן.
+\end{itemize}
+
+\subimport{structure}{flow}
+\newpage
+\subimport{structure}{classes}

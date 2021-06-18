@@ -1,0 +1,92 @@
+@startuml
+!theme plain
+skinparam classFontSize 10
+
+class "MainActivity" as main {
+    -DrawerLayout drawer
+    -BroadcastReceiver airplaneNagger
+    -void finishCourse()
+    -void setMenuItemWhite(MenuItem item)
+}
+class "FirstTimeActivity" as fta {
+    -void moveToNextActivity()
+    #boolean {static} isInCourse(Context ctx)
+    #void {static} beginCourse(Context ctx)
+    #void {static} endCourse(Context ctx)
+}
+class "SplashScreenActivity" as splash {
+    -String {static} SPLASH_PREF_STRING
+    #void {static} wasSplashShownBefore(Activity act)
+    #void {static} setSplashShown(Activity act)
+    -void moveToNextActivity()
+}
+class "ViewerActivity" as view {
+	+boolean onOptionsItemSelected(MenuItem item)
+}
+
+class "ListFragment" as list {
+ 	-String {static} LIST_FRAGMENT_TYPE
+ 	-String {static} LIST_FRAGMENT_TYPE_ARTICLE
+ 	-String {static} LIST_FRAGMENT_TYPE_EXERCISE
+}
+class "ReplFragment" as repl {
+  	-Globals globalEnv;
+  	-ByteArrayOutputStream stdout;
+  	-PrintStream pOStream;
+  	-PipedInputStream stdin;
+  	-PipedOutputStream stdinWriteStream;
+  	-EditText inputBox;
+  	-TextView textView;
+    +void close()
+}
+
+class "AddContentFragment" as content
+class "AddArticleFragment" as addArticle {
+    -EditText articleContent
+    -EditText articleTitle
+    -CheckBox isHardCheckbox
+}
+class "AddExerciseFragment" as addExercise {
+    -EditText exerciseInstructions;
+    -EditText exerciseTitle;
+    -EditText exerciseTest;
+    -EditText exerciseTemplate;
+    -CheckBox isHardCheckbox;
+}
+
+class "ExerciseFragment" as exercise {
+	-int id
+	-String test
+	-TextView resultsView
+	-EditText codeView
+}
+
+class "ArticleFragment" as article {
+    -int id
+    +void onDestroyView()
+}
+
+class CreatingArticlesInfoFragment {}
+class CreatingExercisesInfoFragment {}
+
+splash --> fta : Click "Next" button (or instantly if opened before)
+fta --> main   : Click "Join Course" or "Create Course" (or instantly if in a course)
+fta <-- main : Click "Publish Course" or "Exit Course" in options menu
+
+main --> list  : Select "Exercises" or "Articles" in drawer
+list --> view  : Click on card (Listing)
+view --> list  : Click on "Back" button
+view --> article
+view --> exercise
+
+main --> repl  : Select "REPL" in drawer
+
+main --> content : Select "Add Article or Exercise" in drawer
+
+content --> addArticle  : Select "Add Article" radio button
+content --> addExercise : Select "Add Exercise" radio button
+
+main --> CreatingArticlesInfoFragment  : Select "Get Help - Articles" in drawer
+main --> CreatingExercisesInfoFragment : Select "Get Help - Exercises" in drawer
+
+@enduml

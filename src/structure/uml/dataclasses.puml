@@ -1,0 +1,63 @@
+@startuml
+!theme plain
+
+skinparam classFontSize 10
+
+class Course {
+    +List<Article> articles
+    +List<Exercises> exercises
+}
+
+class Article {
+    +int uid
+    +String title
+    +String contents
+    +boolean hasBeenRead
+    +boolean isHard
+}
+class Exercise {
+    +int uid
+    +String title
+    +String test
+    +String instructions
+    +String template
+    +boolean isDone
+    +boolean isHard
+}
+
+interface Listable {}
+
+class Listing<T extends Listable> {
+    -String title
+    -String intructions
+    -String template
+    -String test
+    -String contents
+    -int id
+    -boolean isDone
+    -boolean hasBeenRead
+    -ImageView checkImageView
+    -ImageView hardImageView
+    -TextView titleTextView
+    -ListingType listingType
+    Listing<Exercise> {static} createExercise(ViewGroup parent)
+    Listing<Article> {static} createArticle(ViewGroup parent)
+    +void bindTo(T bound)
+}
+enum Listing.ListingType {
+    Article,
+    Exercise
+}
+
+interface RecyclerView.ViewHolder {} 
+
+Listable <|-- Article
+Listable <|-- Exercise
+Listing "1" *- "1" Listing.ListingType : contains
+Course o-- Article
+Course o-- Exercise
+Article -- Listing : Binds
+Exercise -- Listing : Binds
+RecyclerView.ViewHolder <|-- Listing
+
+@enduml
